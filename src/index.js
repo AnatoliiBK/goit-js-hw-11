@@ -4,10 +4,12 @@ import Notiflix from 'notiflix';
 const formR = document.querySelector(".search-form");
 const inputR = document.querySelector("input");
 const buttonR = document.querySelector("button");
+const imageContainer = document.querySelector(".gallery")
+const buttonLM = document.querySelector(".load-more");
 
 const BASE_URL = "https://pixabay.com/api/";
-
 const API_KEY = '35870886-75af865edd7f3268a0fe2e3e2';
+
 let page = 1;
 
 formR.style.display = "flex";
@@ -18,13 +20,19 @@ formR.style.backgroundColor = "blue";
 inputR.style.width = "400px";
 inputR.style.height = "40px";
 buttonR.style.height = "40px";
+buttonLM.style.height = "40px";
+buttonLM.style.marginTop = "20px";
+buttonLM.style.display = "block";
+buttonLM.style.marginRight = "auto";
+buttonLM.style.marginLeft = "auto";
+buttonLM.style.display = "none";
 
-async function getImages(name) {
+async function getImages(searchQuery) {
     try {
-      const response = await axios.get(`https://pixabay.com/api/?key=${API_KEY}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
+      const response = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
            
       const responseHits = response.data.hits;
-      console.log(responseHits);
+    //   console.log(responseHits);
       return responseHits;
 
     } catch (error) {
@@ -33,34 +41,49 @@ async function getImages(name) {
     }
   }
 
-  getImages()
+//   getImages()
 
 
 formR.addEventListener("submit", onFormSubmit);
 
-async function onFormSubmit(event) {
+function onFormSubmit(event) {
     event.preventDefault();
-    
-    search = event.target.formR.value;
+    imageContainer.innerHTML = "";
+    page = 1;
+    search = event.target.elements.searchQuery.value.trim();
     console.log(search)
-    // if (getImages(search) === []) {
-    //     Notiflix.Notify.failure("Oops, there is no things with that name");
-    // } else {
-            
-    //     getImages(search).then((data) => {
-    //         formR.insertAdjacentElement("afterend", createMarkup(data))
-    //     })
-    //     console.log(getImages(search))
-    //     console.log(data)
-    //     .catch(err => 
-    //     Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again."));
-    // }
+    if (!search) {
+        return
+    }
+
+
+    getImages(search).then((data) => {
+        if (data.length === 0) {
+          Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");  
+        } else {
+            imageContainer.insertAdjacentHTML("beforeend", createMarkup(data));
+            if (data.length >= 40) {
+                buttonLM.style.display = "block";
+            }
+        }   
+        
+    })
+    .catch(err => 
+    Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again."));
 }
 
-// function createMarkContainer () {
-//     return `<div class="gallery">
-//     </div>`
-// }
+buttonLM.addEventListener("click", onClickLM)
+
+function onClickLM() {
+    page += 1;
+    getImages(search).then((data) => {
+        
+        imageContainer.insertAdjacentHTML("beforeend", createMarkup(data));
+    })
+    .catch(err => 
+    Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again."));
+    
+}
 
 function createMarkup(responseHits) {
     return responseHits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => 
@@ -84,38 +107,3 @@ function createMarkup(responseHits) {
         </div>
     </div>`).join("");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const URL = "https://pixabay.com/api/?key="+API_KEY+"&q="+encodeURIComponent('red roses');
-// $.getJSON(URL, function(data){
-// if (parseInt(data.totalHits) > 0)
-//     $.each(data.hits, function(i, hit){ console.log(hit.pageURL); });
-// else
-//     console.log('No hits');
-// });
-
-
-// async function getImages(name) {
-//     return await fetch(`https://pixabay.com/api/?key=${API_KEY}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true`).then(    
-//     (resp) => {
-//         if (!resp.ok) {
-//             throw new Error(resp.statusText);
-//         }
-//         // console.log(resp.json())
-//         return resp.json();
-//     }
-//   );
-// }
