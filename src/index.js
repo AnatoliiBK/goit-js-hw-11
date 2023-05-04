@@ -49,9 +49,10 @@ formR.addEventListener("submit", onFormSubmit);
 function onFormSubmit(event) {
     event.preventDefault();
     imageContainer.innerHTML = "";
+    buttonLM.style.display = "none"
     page = 1;
     search = event.target.elements.searchQuery.value.trim();
-    console.log(search)
+    // console.log(search)
     if (!search) {
         return
     }
@@ -64,6 +65,8 @@ function onFormSubmit(event) {
             imageContainer.insertAdjacentHTML("beforeend", createMarkup(data));
             if (data.length >= 40) {
                 buttonLM.style.display = "block";
+            } else {
+                Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
             }
         }   
         
