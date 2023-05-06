@@ -1,7 +1,9 @@
-import axios from "axios";
+// import axios from "axios";
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
+import { getImages } from "./fetchImages";
+import { page, responseHits, responseTotalHits } from './fetchImages';
 
 const formR = document.querySelector(".search-form");
 const inputR = document.querySelector("input");
@@ -19,8 +21,8 @@ const galleryLightBox = new SimpleLightbox(".gallery a", {
     nav: "false",
 });
 
-const BASE_URL = "https://pixabay.com/api/";
-const API_KEY = '35870886-75af865edd7f3268a0fe2e3e2';
+// const BASE_URL = "https://pixabay.com/api/";
+// const API_KEY = '35870886-75af865edd7f3268a0fe2e3e2';
 
 let page = 1;
 
@@ -43,25 +45,25 @@ buttonLM.style.color = "white";
 buttonLM.style.marginBottom = "20px"
 buttonLM.style.cursor = "pointer"
 
-let responseHits = [];
-let responseTotalHits = 0;
+// let responseHits;
+// let responseTotalHits;
 let search;
 
-async function getImages(searchQuery) {
-    try {
-      const response = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
+// async function getImages(searchQuery) {
+//     try {
+//       const response = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
            
-      responseHits = response.data.hits;
-      responseTotalHits = response.data.totalHits;
-    //   console.log(responseHits);
-    //   console.log(responseTotalHits)
-      return responseHits;
+//       responseHits = response.data.hits;
+//       responseTotalHits = response.data.totalHits;
+//     //   console.log(responseHits);
+//     //   console.log(responseTotalHits)
+//       return responseHits;
 
-    } catch (error) {
-      console.error(error);
-      Notiflix.Notify.failure("An error occurred while fetching images. Please try again later.");
-    }
-  }
+//     } catch (error) {
+//       console.error(error);
+//       Notiflix.Notify.failure("An error occurred while fetching images. Please try again later.");
+//     }
+//   }
 
 //   getImages()
 

@@ -3,6 +3,8 @@ import axios from "axios";
 const BASE_URL = "https://pixabay.com/api/";
 const API_KEY = '35870886-75af865edd7f3268a0fe2e3e2';
 let page = 1;
+let responseHits;
+let responseTotalHits;
 
 
 export async function getImages(searchQuery) {
@@ -20,3 +22,5 @@ export async function getImages(searchQuery) {
       Notiflix.Notify.failure("An error occurred while fetching images. Please try again later.");
     }
   }
+
+  export { page, responseHits, responseTotalHits }
