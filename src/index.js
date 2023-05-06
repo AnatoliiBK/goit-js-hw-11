@@ -72,7 +72,7 @@ function onFormSubmit(event) {
     imageContainer.innerHTML = "";
     buttonLM.style.display = "none"
     page = 1;
-    search = event.target.searchQuery.value.trim();
+    search = event.target.elements.searchQuery.value.trim();
     // console.log(search)
     if (!search) {
         return
