@@ -116,6 +116,7 @@ function onClickLM() {
             Notiflix.Notify.info("We're sorry, but you've reached the end of search results.", {
                 timeout: 12000,
                 position: 'bottom-left',
+                delay: 3000,
             });
             
 
