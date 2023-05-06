@@ -45,6 +45,7 @@ buttonLM.style.cursor = "pointer"
 
 let responseHits = [];
 let responseTotalHits = 0;
+let search;
 
 async function getImages(searchQuery) {
     try {
