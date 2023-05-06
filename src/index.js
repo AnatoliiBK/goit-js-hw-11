@@ -45,7 +45,7 @@ buttonLM.style.cursor = "pointer"
 
 let responseHits = [];
 let responseTotalHits = 0;
-// let search;
+let search;
 
 async function getImages(searchQuery) {
     try {
@@ -73,7 +73,7 @@ function onFormSubmit(event) {
     imageContainer.innerHTML = "";
     buttonLM.style.display = "none"
     page = 1;
-    const search = event.target.elements.searchQuery.value.trim();
+    search = event.target.elements.searchQuery.value.trim();
     // console.log(search)
     if (!search) {
         return
