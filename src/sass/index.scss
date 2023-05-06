@@ -1,2 +1,11 @@
 @import './common';
 @import './example';
+.gallery {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 30px;
+    flex-basis: calc((100%  - 60px) / 4);
+    align-items: center;
+    justify-content: space-around;
+}

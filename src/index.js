@@ -1,11 +1,23 @@
 import axios from "axios";
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const formR = document.querySelector(".search-form");
 const inputR = document.querySelector("input");
 const buttonR = document.querySelector("button");
 const imageContainer = document.querySelector(".gallery")
 const buttonLM = document.querySelector(".load-more");
+
+const galleryLightBox = new SimpleLightbox(".gallery a", {
+    captionsData: "alt",	
+
+    captionPosition: "down",
+    
+    captionDelay: 250,
+    
+    nav: "false",
+});
 
 const BASE_URL = "https://pixabay.com/api/";
 const API_KEY = '35870886-75af865edd7f3268a0fe2e3e2';
@@ -26,13 +38,22 @@ buttonLM.style.display = "block";
 buttonLM.style.marginRight = "auto";
 buttonLM.style.marginLeft = "auto";
 buttonLM.style.display = "none";
+buttonLM.style.backgroundColor = "blue";
+buttonLM.style.color = "white";
+buttonLM.style.marginBottom = "20px"
+buttonLM.style.cursor = "pointer"
+
+let responseHits = [];
+let responseTotalHits = 0;
 
 async function getImages(searchQuery) {
     try {
       const response = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
            
-      const responseHits = response.data.hits;
+      responseHits = response.data.hits;
+      responseTotalHits = response.data.totalHits;
     //   console.log(responseHits);
+    //   console.log(responseTotalHits)
       return responseHits;
 
     } catch (error) {
@@ -63,11 +84,18 @@ function onFormSubmit(event) {
           Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");  
         } else {
             imageContainer.insertAdjacentHTML("beforeend", createMarkup(data));
-            if (data.length >= 40) {
+            galleryLightBox.refresh();
+            if (page !== Math.ceil(responseTotalHits / data.length)) {
                 buttonLM.style.display = "block";
+                
             } else {
-                Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.")
+                if (data.length === responseTotalHits) {
+                    buttonLM.style.display = "none";
+                    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+                  }
+                
             }
+
         }   
         
     })
@@ -78,10 +106,25 @@ function onFormSubmit(event) {
 buttonLM.addEventListener("click", onClickLM)
 
 function onClickLM() {
+
     page += 1;
+
     getImages(search).then((data) => {
         
+        if (page === Math.ceil(responseTotalHits / data.length) - 1) {
+            buttonLM.style.display = "none";
+            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.", {
+                timeout: 12000,
+                position: 'bottom-left',
+            });
+            
+
+        }
         imageContainer.insertAdjacentHTML("beforeend", createMarkup(data));
+        galleryLightBox.refresh();
+        
+
+        
     })
     .catch(err => 
     Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again."));
@@ -92,7 +135,7 @@ function createMarkup(responseHits) {
     return responseHits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => 
     `<div class="photo-card">
         <a href="${largeImageURL}">
-            <img src="${webformatURL}" alt="${tags}" loading="lazy">
+            <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300">
         </a>
         <div class="info">
             <p class="info-item">Likes
@@ -110,3 +153,34 @@ function createMarkup(responseHits) {
         </div>
     </div>`).join("");
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// console.log(responseHits);
+                // console.log(responseTotalHits)
+                // console.log(data.length)
+                // console.log(Math.ceil(responseTotalHits / data.length))
+                // // console.log(responseTotalHits)
+
+
+// console.log(page)
+        // console.log(Math.ceil(responseTotalHits / data.length) - 1)
+        // console.log(responseTotalHits)
+        // console.log(data.length)
