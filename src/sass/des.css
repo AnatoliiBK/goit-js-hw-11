@@ -1,0 +1,43 @@
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    background-color: blue;
+
+}
+
+input {
+    width: 400px;
+    height: 40px;
+
+}
+
+button {
+    height: 40px;
+
+}
+
+.load-more {
+    height: 40px;
+    margin-top: 20px;
+    display: Block;
+    margin-right: auto;
+    margin-left: auto;
+    display: none;
+    background-color: blue;
+    color: white;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.gallery {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 30px;
+    flex-basis: calc((100% - 60px) / 4);
+    align-items: center;
+    justify-content: space-around;
+}
+
