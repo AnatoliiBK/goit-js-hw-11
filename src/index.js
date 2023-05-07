@@ -3,9 +3,6 @@ import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { getImages } from "./fetchImages";
-// import { page } from "./fetchImages";
-// import { responseHits } from "./fetchImages";
-// import { responseTotalHits } from "./fetchImages";
 
 const formR = document.querySelector(".search-form");
 const imageContainer = document.querySelector(".gallery")
@@ -22,8 +19,6 @@ const galleryLightBox = new SimpleLightbox(".gallery a", {
     nav: "false",
 });
 
-// const BASE_URL = "https://pixabay.com/api/";
-// const API_KEY = '35870886-75af865edd7f3268a0fe2e3e2';
 
 let page = 1;
 // let responseHits;
@@ -76,7 +71,7 @@ async function onFormSubmit(event) {
             } else {
                 if (hits.length === responseTotalHits) {
                     buttonLM.style.display = "none";
-                    // Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+                    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
                   }
                 
             }
@@ -86,7 +81,7 @@ async function onFormSubmit(event) {
         console.log(error);
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
     }
-
+}
 
 buttonLM.addEventListener("click", onClickLM)
 
