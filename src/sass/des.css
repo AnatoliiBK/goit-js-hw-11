@@ -1,5 +1,8 @@
-/* background-color: rgb(245, 245, 22); */
-
+body {
+    
+    background-color: rgb(245, 245, 22);
+    
+}
 
 .search-form {
     display: flex;
