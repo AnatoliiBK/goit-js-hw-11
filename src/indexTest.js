@@ -1,8 +1,8 @@
-// import axios from "axios";
+import axios from "axios";
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-import { getImages } from "./fetchImages";
+// import { getImages } from "./fetchImages";
 // import { page } from "./fetchImages";
 // import { responseHits } from "./fetchImages";
 // import { responseTotalHits } from "./fetchImages";
@@ -22,34 +22,34 @@ const galleryLightBox = new SimpleLightbox(".gallery a", {
     nav: "false",
 });
 
-// const BASE_URL = "https://pixabay.com/api/";
-// const API_KEY = '35870886-75af865edd7f3268a0fe2e3e2';
+const BASE_URL = "https://pixabay.com/api/";
+const API_KEY = '35870886-75af865edd7f3268a0fe2e3e2';
 
 let page = 1;
-// let responseHits;
+let responseHits;
 let responseTotalHits;
 let search;
 
-// async function getImages(searchQuery) {
-//     try {
-//       const response = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
+async function getImages(searchQuery) {
+    try {
+      const response = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
            
-//       responseHits = response.data.hits;
-//       responseTotalHits = response.data.totalHits;
-//     //   console.log(responseHits);
-//     //   console.log(responseTotalHits)
-//       return responseHits;
+      responseHits = response.data.hits;
+      responseTotalHits = response.data.totalHits;
+    //   console.log(responseHits);
+    //   console.log(responseTotalHits)
+      return responseHits;
 
-//     } catch (error) {
-//       console.error(error);
-//       Notiflix.Notify.failure("An error occurred while fetching images. Please try again later.");
-//     }
-//   }
+    } catch (error) {
+      console.error(error);
+      Notiflix.Notify.failure("An error occurred while fetching images. Please try again later.");
+    }
+  }
 
 
 formR.addEventListener("submit", onFormSubmit);
 
-async function onFormSubmit(event) {
+function onFormSubmit(event) {
     event.preventDefault();
     bodyDes.style.backgroundColor = "white";
     imageContainer.innerHTML = "";
@@ -61,60 +61,57 @@ async function onFormSubmit(event) {
         return
     }
 
-    try {
-        const { hits, totalHits } = await getImages(search, page);
-        responseTotalHits = totalHits;
-    
-        if (hits.length === 0) {
+
+    getImages(search).then((data) => {
+        if (data.length === 0) {
           Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");  
         } else {
-            imageContainer.insertAdjacentHTML("beforeend", createMarkup(hits));
+            imageContainer.insertAdjacentHTML("beforeend", createMarkup(data));
             galleryLightBox.refresh();
-            if (page !== Math.ceil(responseTotalHits / 40)) {
+            if (page !== Math.ceil(responseTotalHits / data.length)) {
                 buttonLM.style.display = "block";
                 
             } else {
-                if (hits.length === responseTotalHits) {
+                if (data.length === responseTotalHits) {
                     buttonLM.style.display = "none";
-                    // Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+                    Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
                   }
                 
             }
 
-        }
-    } catch (error) {
-        console.log(error);
-        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-    }
-
+        }   
+        
+    })
+    .catch(err => 
+    Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again."));
+}
 
 buttonLM.addEventListener("click", onClickLM)
 
-async function onClickLM() {
+function onClickLM() {
     page += 1;
 
-    try {
-        const { hits, totalHits } = await getImages(search, page);
-        responseTotalHits = totalHits;
-    
+    getImages(search).then((data) => {
         
-        if (page === Math.ceil(responseTotalHits / 40)) {
+        if (page === Math.ceil(responseTotalHits / data.length) - 1) {
             buttonLM.style.display = "none";
             Notiflix.Notify.info("We're sorry, but you've reached the end of search results.", {
                 timeout: 12000,
                 position: 'bottom-left',
                 delay: 3000,
             });
+            
+
         }
-
-        imageContainer.insertAdjacentHTML("beforeend", createMarkup(hits));
+        imageContainer.insertAdjacentHTML("beforeend", createMarkup(data));
         galleryLightBox.refresh();
+        
 
-    } catch (error) {
-        console.log(error);
-        Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
-    }
-     
+        
+    })
+    .catch(err => 
+    Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again."));
+    
 }
 
 function createMarkup(responseHits) {
@@ -139,53 +136,3 @@ function createMarkup(responseHits) {
         </div>
     </div>`).join("");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const inputR = document.querySelector("input");
-// const buttonR = document.querySelector("button");
-
-// console.log(responseHits);
-                // console.log(responseTotalHits)
-                // console.log(data.length)
-                // console.log(Math.ceil(responseTotalHits / data.length))
-                // // console.log(responseTotalHits)
-
-
-// console.log(page)
-        // console.log(Math.ceil(responseTotalHits / data.length) - 1)
-        // console.log(responseTotalHits)
-        // console.log(data.length)
