@@ -21,26 +21,8 @@ const galleryLightBox = new SimpleLightbox(".gallery a", {
 
 
 let page = 1;
-// let responseHits;
 let responseTotalHits;
 let search;
-
-// async function getImages(searchQuery) {
-//     try {
-//       const response = await axios.get(`${BASE_URL}?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
-           
-//       responseHits = response.data.hits;
-//       responseTotalHits = response.data.totalHits;
-//     //   console.log(responseHits);
-//     //   console.log(responseTotalHits)
-//       return responseHits;
-
-//     } catch (error) {
-//       console.error(error);
-//       Notiflix.Notify.failure("An error occurred while fetching images. Please try again later.");
-//     }
-//   }
-
 
 formR.addEventListener("submit", onFormSubmit);
 
@@ -51,7 +33,7 @@ async function onFormSubmit(event) {
     buttonLM.style.display = "none"
     page = 1;
     search = event.target.elements.searchQuery.value.trim();
-    // console.log(search)
+    
     if (!search) {
         return
     }
